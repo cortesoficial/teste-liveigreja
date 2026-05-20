@@ -1,95 +1,241 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rádio Online</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Live e Sorteio Especial</title>
     <style>
+        :root {
+            --primary-color: #1877f2; /* Azul Facebook */
+            --bg-color: #f0f2f5;
+        }
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
         }
-        .player-card {
-            background: #1e293b;
-            padding: 2rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            text-align: center;
-            width: 350px;
-            border: 1px solid #334155;
-        }
-        #capa {
-            width: 200px;
-            height: 200px;
-            border-radius: 1rem;
-            object-fit: cover;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-        h1 { font-size: 1.5rem; margin: 0.5rem 0; color: #38bdf8; }
-        p { margin: 0.2rem 0; color: #94a3b8; }
-        .musica-atual { color: #f1f5f9; font-weight: bold; margin-top: 1rem; }
-        audio {
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1200px;
             width: 100%;
-            margin-top: 1.5rem;
-            height: 40px;
+        }
+        /* Coluna da Esquerda (Vídeo e Sorteio) */
+        .main-content {
+            flex: 2;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .video-container {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #000;
+        }
+        /* Botão de Sorteio */
+        .sorteio-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: #e7f3ff;
+            border: 2px dashed var(--primary-color);
+            border-radius: 10px;
+            text-align: center;
+        }
+        .btn-sorteio {
+            background-color: #42b72a; /* Verde chamativo */
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-sorteio:hover {
+            background-color: #36a420;
+        }
+        /* Coluna da Direita (Chat) */
+        .chat-container {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+        .chat-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message {
+            background: var(--bg-color);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .message strong {
+            color: var(--primary-color);
+        }
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+        }
+        .chat-input button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+        
+        /* Modal do Sorteio */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+        }
+        .modal-content input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
-<div class="player-card">
-    <img id="capa" src="https://via.placeholder.com/200" alt="Capa do Álbum">
-    <h1 id="titulo-radio">Carregando...</h1>
-    <p id="genero"></p>
-    
-    <div class="musica-atual">
-        <span>Tocando agora:</span>
-        <div id="musica">...</div>
+<div class="container">
+    <!-- LADO ESQUERDO: VÍDEO E SORTEIO -->
+    <div class="main-content">
+        <h2>Transmissão ao Vivo</h2>
+        <div class="video-container">
+            <!-- CÓDIGO DA SUA LIVE DO FACEBOOK -->
+            <iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fwww.facebook.com%2F61566893221569%2Fvideos%2F1499514758367293%2F&show_text=false&width=560&t=0" 
+                    width="100%" height="400" style="border:none;overflow:hidden" scrolling="no" frameborder="0" 
+                    allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+            </iframe>
+        </div>
+
+        <div class="sorteio-box">
+            <h3>Quer ganhar prêmios nesta Live?</h3>
+            <p>Clique no botão abaixo e deixe seu nome e WhatsApp para participar do sorteio oficial!</p>
+            <button class="btn-sorteio" onclick="abrirModal()">🎯 PARTICIPAR DO SORTEIO</button>
+        </div>
     </div>
 
-    <audio id="player" controls>
-        Seu navegador não suporta áudio.
-    </audio>
-    
-    <p style="font-size: 0.8rem; margin-top: 1rem;">Ouvintes: <span id="ouvintes">0</span></p>
+    <!-- LADO DIREITO: CHAT -->
+    <div class="chat-container">
+        <div class="chat-header">Bate-Papo ao Vivo</div>
+        <div class="chat-messages" id="chat-box">
+            <div class="message"><strong>Sistema:</strong> Bem-vindo à live! Deixe seu comentário.</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="msg-input" placeholder="Digite sua mensagem...">
+            <button onclick="enviarMensagem()">Enviar</button>
+        </div>
+    </div>
 </div>
 
-<script type="text/javascript">
-function atualizarDados() {
-    $.getJSON('https://cors-anywhere.herokuapp.com/http://ipstm.net/api-json/TmpRM05qST0rRA==', function(data) {
-        // Atualiza os textos
-        $('#titulo-radio').text(data.titulo);
-        $('#musica').text(data.musica_atual);
-        $('#genero').text(data.genero);
-        $('#ouvintes').text(data.ouvintes_conectados);
+<!-- MODAL PARA PEGAR DADOS DO SORTEIO -->
+<div class="modal" id="modalSorteio">
+    <div class="modal-content">
+        <h3>Participar do Sorteio</h3>
+        <input type="text" id="nomeParticipante" placeholder="Seu Nome Completo">
+        <input type="text" id="whatsParticipante" placeholder="Seu WhatsApp (DDD + Número)">
+        <button class="btn-sorteio" style="width: 100%; margin-top: 10px;" onclick="registrarParticipante()">Confirmar Participação</button>
+        <button onclick="fecharModal()" style="margin-top: 10px; background: none; border: none; color: red; cursor: pointer;">Cancelar</button>
+    </div>
+</div>
+
+<script>
+    // --- LÓGICA DO CHAT ---
+    function enviarMensagem() {
+        const input = document.getElementById('msg-input');
+        const chatBox = document.getElementById('chat-box');
         
-        // Atualiza a capa da música
-        if(data.capa_musica) {
-            $('#capa').attr('src', data.capa_musica);
+        if(input.value.trim() !== "") {
+            const msgElement = document.createElement('div');
+            msgElement.className = 'message';
+            msgElement.innerHTML = `<strong>Você:</strong> ${input.value}`;
+            
+            chatBox.appendChild(msgElement);
+            input.value = ""; 
+            chatBox.scrollTop = chatBox.scrollHeight; 
         }
+    }
 
-        // Configura o link do áudio se ainda não estiver configurado
-        // Geralmente o streaming é http://IP:PORTA/;
-        var streamUrl = "http://" + data.ip + ":" + data.porta + "/;";
-        if($('#player').attr('src') !== streamUrl) {
-            $('#player').attr('src', streamUrl);
-        }
+    document.getElementById('msg-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') enviarMensagem();
     });
-}
 
-// Atualiza ao carregar e depois a cada 30 segundos
-$(document).ready(function() {
-    atualizarDados();
-    setInterval(atualizarDados, 30000);
-});
+    // --- LÓGICA DO SORTEIO ---
+    function abrirModal() {
+        document.getElementById('modalSorteio').style.display = 'flex';
+    }
+
+    function fecharModal() {
+        document.getElementById('modalSorteio').style.display = 'none';
+    }
+
+    let listaSorteio = [];
+
+    function registrarParticipante() {
+        const nome = document.getElementById('nomeParticipante').value;
+        const whats = document.getElementById('whatsParticipante').value;
+
+        if(nome === "" || whats === "") {
+            alert("Por favor, preencha nome e WhatsApp!");
+            return;
+        }
+
+        listaSorteio.push({ nome: nome, whatsapp: whats });
+        
+        alert("🎉 Sucesso! Seu nome está na lista do sorteio.");
+        console.log("Lista atual de participantes:", listaSorteio);
+        
+        fecharModal();
+        document.getElementById('nomeParticipante').value = "";
+        document.getElementById('whatsParticipante').value = "";
+    }
 </script>
 
 </body>
